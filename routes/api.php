@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\ProjetController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +24,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // ProjetController
     Route::get("getprojetsbyuser", [ProjetController::class, "getProjetsByUser"]);
     Route::post("storeprojet", [ProjetController::class, "storeProjet"]);
-    Route::delete("deleteprojet", [ProjetController::class, "destroy"]);
+    Route::delete("deleteprojet/{id}", [ProjetController::class, "destroy"]);
 
-    //
+    // UserController
+    Route::get("getprofileuser", [UserController::class, "GetProfileUser"]);
 
-
-
+    // TaskController
+    Route::get("getTasksByUser", [TaskController::class, "getTasksByUser"]);
+    Route::post("storeTask", [TaskController::class, "storeTask"]);
+    Route::delete("deletetask/{id}", [TaskController::class, "destroy"]);
+    Route::delete("updatetask/{id}", [TaskController::class, "update"]);
 });

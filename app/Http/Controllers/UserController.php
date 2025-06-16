@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +13,8 @@ class UserController extends Controller
     //
     public function GetProfileUser()
     {
-        $user_id = Auth::user()->id;
-        $user = User::with("profile")->find($user_id);
-      //  return new UserResource($user);
+        $user = Auth::user();
+        return new UserResource($user);
     }
     public function register(Request $request)
     {
@@ -48,7 +48,7 @@ class UserController extends Controller
         $token = $user->createToken('auth_Token')->plainTextToken;
         return response()->json([
             "message" => "Login successful",
-          //  "user" => $user,
+            //  "user" => $user,
             "token" => $token
         ]);
     }
