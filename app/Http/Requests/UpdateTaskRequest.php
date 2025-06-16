@@ -23,7 +23,7 @@ class UpdateTaskRequest extends FormRequest
     {
         return [
             //
-            "title" => 'sometimes|string|max:40',
+            "titre" => 'sometimes|string|max:40',
             "description" => 'sometimes|string',
             'pirority' => 'sometimes|in:high,medium,low',
         ];

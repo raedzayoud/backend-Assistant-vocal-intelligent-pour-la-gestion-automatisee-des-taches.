@@ -14,42 +14,83 @@ class TaskController extends Controller
 {
     public function getTasksByUser()
     {
-        // $tasks = Projet::user()->tasks()->orderBy('id')->get();
-        // return response()->json(["tasks" => $tasks]);
-    }
+        $tasks = Task::whereHas('projet', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+            ->orderBy('id')
+            ->get();
 
-    public function storeTask(StoreTaskRequest $storeTaskRequest, $projet_id)
+        return response()->json(["tasks" => $tasks]);
+    }
+    public function storeTask(StoreTaskRequest $request, $projet_id)
     {
-        $validateData = $storeTaskRequest->validated();
-        $validateData['projet_id'] = $projet_id;
-        $task = Task::create($validateData);
+        // Vérifier si le projet appartient à l'utilisateur connecté
+        $projet = Projet::where('id', $projet_id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$projet) {
+            return response()->json([
+                'message' => 'Vous n\'êtes pas autorisé à ajouter une tâche à ce projet.'
+            ]);
+        }
+
+        $validatedData = $request->validated();
+        $validatedData['projet_id'] = $projet->id;
+
+
+        $task = Task::create($validatedData);
+
         return response()->json($task);
     }
+
 
     public function destroy(int $id)
     {
         try {
             $task = Task::find($id);
+
+            if (!$task) {
+                return response()->json([
+                    "error" => "Task not found."
+                ], 404);
+            }
+
+            if ($task->projet->user_id !== Auth::id()) {
+                return response()->json([
+                    "error" => "You are not authorized to delete this task."
+                ], 403);
+            }
+
             $task->delete();
-            return response()->json(["message" => "task deleted successfully"]);
+
+            return response()->json([
+                "message" => "Task deleted successfully."
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
-                "error" => "task Not Found",
+                "error" => "An error occurred while deleting the task.",
                 "details" => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
-
     public function update(UpdateTaskRequest $request, int $id)
     {
-        //
-       // $user_id = Auth::user()->id;
-        $tasks = Task::find($id);
-        // if ($user_id != $tasks->user_id) {
-        //     return response()->json(["message" =>
-        //     "You are not allowed to update this task"], 403);
-        // }
-        $tasks->update($request->validated());
-        return response()->json($tasks);
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                "error" => "Task not found."
+            ], 404);
+        }
+
+        if ($task->projet->user_id !== Auth::id()) {
+            return response()->json([
+                "error" => "You are not authorized to update this task."
+            ], 403);
+        }
+
+        $task->update($request->validated());
+        return response()->json($task);
     }
 }
