@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeminiController;
+use App\Http\Controllers\ProjetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,4 +19,14 @@ Route::get('login', [UserController::class, 'login']);
 Route::post("logout", [UserController::class, "logout"])->middleware('auth:sanctum');
 
 
-Route::middleware('auth:sanctum')->group(function () {});
+Route::middleware('auth:sanctum')->group(function () {
+    // ProjetController
+    Route::get("getprojetsbyuser", [ProjetController::class, "getProjetsByUser"]);
+    Route::post("storeprojet", [ProjetController::class, "storeProjet"]);
+    Route::delete("deleteprojet", [ProjetController::class, "destroy"]);
+
+    //
+
+
+
+});

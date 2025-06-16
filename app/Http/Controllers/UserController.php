@@ -21,7 +21,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:6|confirmed',
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -48,7 +48,7 @@ class UserController extends Controller
         $token = $user->createToken('auth_Token')->plainTextToken;
         return response()->json([
             "message" => "Login successful",
-            "user" => $user,
+          //  "user" => $user,
             "token" => $token
         ]);
     }
