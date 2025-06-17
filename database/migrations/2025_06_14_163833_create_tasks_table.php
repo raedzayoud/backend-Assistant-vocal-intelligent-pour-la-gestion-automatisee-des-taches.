@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('projet_id')->constrained('projets')->cascadeOnDelete();
             $table->string('titre');
             $table->string('description');
-            $table->enum("pirority", ['high', 'medium', 'low']);
             $table->timestamps();
         });
     }

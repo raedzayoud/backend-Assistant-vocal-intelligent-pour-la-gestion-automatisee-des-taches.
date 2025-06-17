@@ -34,4 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("storeTask/{id}", [TaskController::class, "storeTask"]);
     Route::delete("deletetask/{id}", [TaskController::class, "destroy"]);
     Route::put("updatetask/{id}", [TaskController::class, "update"]);
+
+    // Gemeni Controller
+    Route::post('ask-gemini-2', [GeminiController::class, 'StoreTheTaskAutomatique']);
+
+
+
 });
