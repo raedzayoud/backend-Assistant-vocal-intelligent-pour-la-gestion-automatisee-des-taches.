@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("getprofileuser", [UserController::class, "GetProfileUser"]);
 
     // TaskController
-    Route::get("getTasksByUser", [TaskController::class, "getTasksByUser"]);
+    Route::get("getTasksByUser/{id}", [TaskController::class, "getTasksByUser"]);
     Route::post("storeTask/{id}", [TaskController::class, "storeTask"]);
     Route::delete("deletetask/{id}", [TaskController::class, "destroy"]);
     Route::put("updatetask/{id}", [TaskController::class, "update"]);

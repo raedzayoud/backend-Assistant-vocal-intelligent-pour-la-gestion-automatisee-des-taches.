@@ -12,16 +12,18 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function getTasksByUser()
+    public function getTasksByUser($idprojet)
     {
-        $tasks = Task::whereHas('projet', function ($query) {
-            $query->where('user_id', Auth::id());
-        })
+        $tasks = Task::where('projet_id', $idprojet)
+            ->whereHas('projet', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
             ->orderBy('id')
             ->get();
 
         return response()->json(["tasks" => $tasks]);
     }
+
     public function storeTask(StoreTaskRequest $request, $projet_id)
     {
         // Vérifier si le projet appartient à l'utilisateur connecté
