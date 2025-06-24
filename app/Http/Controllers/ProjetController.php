@@ -43,4 +43,27 @@ class ProjetController extends Controller
             ]);
         }
     }
+
+    public function update(Request $request, int $id)
+    {
+        $project = Projet::find($id);
+
+        if (!$project) {
+            return response()->json([
+                "error" => "Project not found."
+            ], 404);
+        }
+
+        if ($project->user_id !== Auth::id()) {
+            return response()->json([
+                "error" => "You are not authorized to update this task."
+            ], 403);
+        }
+
+        $project->update($request->validate([
+            "name"=>"sometimes|string",
+            "description"=>"sometimes|string"
+        ]));
+        return response()->json(["data"=>$project]);
+    }
 }

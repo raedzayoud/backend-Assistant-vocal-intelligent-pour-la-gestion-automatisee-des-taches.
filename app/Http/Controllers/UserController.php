@@ -16,18 +16,33 @@ class UserController extends Controller
         $user = Auth::user();
         return new UserResource($user);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $user = User::find($user_id);
+
+        $user->update($request->validate([
+            'name' => 'sometimes|string|max:255',
+            'phone' => 'sometimes|string',
+        ]));
+
+        return response()->json(["data" => $user]);
+    }
+
+
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'phone'=>'required|string',
+            'phone' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
         ]);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone'=>$request->phone,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
         return response()->json([

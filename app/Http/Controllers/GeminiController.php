@@ -142,7 +142,7 @@ class GeminiController extends Controller
             //Create and store the task
             $task = new Task();
             $task->titre = $decoded['titre'] ?? 'Tâche sans titre';
-            $task->description=$decoded['description'];
+            $task->description=$decoded['description']??"Tâche sans description";
             $task->projet_id = $projet->id;
             $task->save();
 

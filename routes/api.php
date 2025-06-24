@@ -25,9 +25,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("getprojetsbyuser", [ProjetController::class, "getProjetsByUser"]);
     Route::post("storeprojet", [ProjetController::class, "storeProjet"]);
     Route::delete("deleteprojet/{id}", [ProjetController::class, "destroy"]);
+    Route::put("updateprojet/{id}", [ProjetController::class, "update"]);
 
     // UserController
     Route::get("getprofileuser", [UserController::class, "GetProfileUser"]);
+    Route::put("updateUser", [UserController::class, "updateProfile"]);
 
     // TaskController
     Route::get("getTasksByUser/{id}", [TaskController::class, "getTasksByUser"]);
