@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeminiController;
+use App\Http\Controllers\MettingController;
 use App\Http\Controllers\ProjetController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -39,7 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Gemeni Controller
     Route::post('ask-gemini-2', [GeminiController::class, 'StoreTheTaskAutomatique']);
-
+    // Meeting Controller
+    Route::post('create-meeting', [MettingController::class, 'create']);
 
 
 });
