@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Meet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class MettingController extends Controller
@@ -12,7 +15,7 @@ class MettingController extends Controller
     {
         $prompt = $request->input('prompt');
 
-        $title = 'Meeting'; // fallback title
+        $title = 'Meeting';
         $now = Carbon::now();
 
         // Check for time keywords
@@ -37,11 +40,34 @@ class MettingController extends Controller
         $room = 'meet-' . Str::random(8);
         $link = "https://meet.jit.si/$room";
 
+        $user_id = Auth::user()->id;
+
+        Meet::create(
+            [
+                'user_id' => $user_id,
+                'title' => $title,
+                'start_time' => $now->toDateTimeString(),
+                'room' => $room,
+                'link' => $link
+            ]
+        );
+
+
         return response()->json([
+            'message' => 'Meet created successfully !',
             'title' => $title,
             'start_time' => $now->toDateTimeString(),
             'room' => $room,
             'link' => $link,
+        ]);
+    }
+
+    public function getAllMeetByUser()
+    {
+        $user_id = Auth::user()->id;
+        $meet = DB::select("select * from meets where user_id=?", [$user_id]);
+        return response()->json([
+            "meet" => $meet
         ]);
     }
 }

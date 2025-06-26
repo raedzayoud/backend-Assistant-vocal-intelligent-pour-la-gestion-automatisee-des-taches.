@@ -40,8 +40,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Gemeni Controller
     Route::post('ask-gemini-2', [GeminiController::class, 'StoreTheTaskAutomatique']);
+
     // Meeting Controller
     Route::post('create-meeting', [MettingController::class, 'create']);
+    Route::get('get-meeting-user', [MettingController::class, 'getAllMeetByUser']);
 
 
 });
