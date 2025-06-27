@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('start_time');
             $table->string('room');
-            $table->string('link');
             $table->timestamps();
         });
     }
